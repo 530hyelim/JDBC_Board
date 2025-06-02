@@ -1,9 +1,15 @@
 package com.kh.board.view;
 
+import java.util.Scanner;
+
+import com.kh.board.controller.BoardController;
+
 public class BoardView {
 	// 입력을 위한 Scanner변수 선언 및 초기화
 	// 기능 실행을 위한 BoardController 변수 선언 및 초기화.
 	String memberId = null;
+	private Scanner sc = new Scanner(System.in);
+	private BoardController bc = new BoardController();
 	/**
 	 * 로그인 기능.
 	 * 사용자에게 로그인을 할 계정의 ID와, PWD를 입력받고 로그인 요청을 보내는 메소드
@@ -13,9 +19,22 @@ public class BoardView {
 	public void login() {
 		System.out.println("### 게시판 서비스###");
 		System.out.println("서비스 이용을 위해 로그인을 진행해주세요.");
-		System.out.print("ID");
-		System.out.print("PWD");		
+		System.out.print("ID : ");
+		String memberId = sc.nextLine();
+		System.out.print("PWD : ");		
+		String memberPwd = sc.nextLine();
 		
+		int result = bc.login(memberId, memberPwd);
+		
+		if (result == 1) {
+			System.out.println("로그인 성공!");
+			this.memberId = memberId;
+			mainMenu();
+		} else {
+			System.out.println("로그인 실패.. 다시입력");
+			login();
+			return;
+		}
 	}
 	
 	/**
@@ -32,7 +51,22 @@ public class BoardView {
 			System.out.println("3. 게시판 등록하기");
 			System.out.println("4. 게시판 수정하기");
 			System.out.println("5. 게시판 삭제하기");			
-			System.out.println("9. 끝");			
+			System.out.println("9. 끝");		
+			
+			System.out.println("-------------------------");
+            System.out.print("이용할 메뉴 선택 : ");
+			int menu = sc.nextInt();
+			sc.nextLine();
+			
+			switch(menu) {
+			case 1: selectBoardList(); break;
+			case 2: selectBoard(); break;
+			case 3: insertBoard(); break;
+			case 4: updateBoard(); break;
+			case 5: deleteBoard(); break;
+			case 9:
+			default: System.out.println("잘못된 메뉴를 선택했습니다. 다시 입력해주세요.");
+			}
 		}
 	}
 	/** 
