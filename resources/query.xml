@@ -4,8 +4,22 @@
 	<entry key="login">
 	SELECT * FROM MEMBER WHERE MEMBER_ID = ? AND MEMBER_PWD = ?
 	</entry>
-
-
-
-
+	<entry key="selectMember">
+	SELECT * FROM MEMBER	
+	</entry>
+	<entry key="insert">
+	INSERT INTO BOARD VALUES(?,?,?,DEFAULT,?,DEFAULT)
+	</entry>
+	<entry key="select">
+	SELECT * FROM BOARD WHERE DELETE_YN = 'N'
+	</entry>
+	<entry key="selectBoard">
+	SELECT * FROM BOARD WHERE BNO = ? AND DELETE_YN = 'N'
+	</entry>
+	<entry key="updateBoard">
+	UPDATE BOARD SET TITLE = ?, CONTENT = ? WHERE BNO = ? AND DELETE_YN = 'N'
+	</entry>
+	<entry key="disableBoard">
+	UPDATE BOARD SET DELETE_YN = 'Y' WHERE BNO = ?
+	</entry>
 </properties>

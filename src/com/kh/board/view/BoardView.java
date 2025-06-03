@@ -1,8 +1,10 @@
 package com.kh.board.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.kh.board.controller.BoardController;
+import com.kh.board.model.vo.Board;
 
 public class BoardView {
 	// 입력을 위한 Scanner변수 선언 및 초기화
@@ -17,7 +19,7 @@ public class BoardView {
 	 * 로그인 성공시 memberId에 사용자의 id를 저장.
 	 *  */
 	public void login() {
-		System.out.println("### 게시판 서비스###");
+		System.out.println("### 게시판 서비스 ###");
 		System.out.println("서비스 이용을 위해 로그인을 진행해주세요.");
 		System.out.print("ID : ");
 		String memberId = sc.nextLine();
@@ -64,7 +66,7 @@ public class BoardView {
 			case 3: insertBoard(); break;
 			case 4: updateBoard(); break;
 			case 5: deleteBoard(); break;
-			case 9:
+			case 9: System.out.println("프로그램을 종료합니다."); return;
 			default: System.out.println("잘못된 메뉴를 선택했습니다. 다시 입력해주세요.");
 			}
 		}
@@ -75,7 +77,13 @@ public class BoardView {
 	 * 게시글의 번호, 제목, 작성자, 작성시간 출력
 	 * */
 	public void selectBoardList() {
+		List<Board> b = bc.selectBoardList();
+		if (b.isEmpty()) {
+			System.out.println("게시글이 없습니다.");
+			return;
+		}
 		System.out.println("게시글 번호\t게시글 제목\t작성자\t작성시간");
+		System.out.println(b);
 	}
 	
 	/** 
@@ -85,10 +93,22 @@ public class BoardView {
 	 * 
 	 * */
 	public void selectBoard() {
+		System.out.println("### 게시글 상세 조회 ###");
+		System.out.println("서비스 이용을 위해 게시글 번호를 입력해주세요.");
+		System.out.print("게시글 번호 : ");
+		int bno = sc.nextInt();
+		sc.nextLine();
 		
+		Board b = bc.selectBoard(bno);
+		
+		if (b == null) {
+			System.out.println("게시글 조회 실패..");
+			return;
+		}
 		System.out.println("게시글 번호\t게시글 제목\t게시글 작성 날짜");
-		
-		System.out.println("게시글 내용");
+		System.out.println(b.getBno() + "\t" + b.getTitle() + "\t" + b.getCreateDate());
+		System.out.print("게시글 내용 : ");
+		System.out.println(b.getContent());
 	}
 	
 	/** 
@@ -96,7 +116,20 @@ public class BoardView {
 	 * 사용자로 하여금 게시글 제목과, 내용을 입력받아 게시글을 등록요청을 보내는 메소드
 	 * */
 	public void insertBoard() {
+		System.out.println("### 게시글 등록 ###");
+		System.out.println("게시글 등록을 위해 제목과 내용을 입력해주세요.");
+		System.out.print("게시글 제목 : ");
+		String title = sc.nextLine();
+		System.out.print("내용 : ");		
+		String content = sc.nextLine();
 		
+		int result = bc.insertBoard(title, content, memberId);
+		
+		if (result == 1) {
+			System.out.println("게시글 등록 성공!");
+		} else {
+			System.out.println("게시글 등록 실패..");
+		}
 	}
 	
 	/** 
@@ -104,7 +137,36 @@ public class BoardView {
 	 * 사용자로 하여금 수정할 게시글 제목 번호과 내용을 입력받아 게시글 수정요청을 보내는 메소드
 	 * */
 	public void updateBoard() {
+		System.out.println("### 게시글 수정 ###");
+		System.out.println("게시글 수정을 위해 게시글 번호와 수정할 제목,내용을 입력해주세요.");
+		System.out.print("게시글 번호 : ");		
+		int bno = sc.nextInt();
+		sc.nextLine();
 		
+		Board b = bc.selectBoard(bno);
+		
+		// 해당 게시글 번호가 board 테이블에 존재하는지 확인
+		if (b == null) {
+			System.out.println("해당 게시글이 존재하지 않습니다.");
+			return;
+		}
+		// 존재한다면 memberId와 게시글의 writer가 일치한지 확인
+		if (!memberId.equals(b.getWriter())) {
+			System.out.println("다른 사용자의 게시글을 수정할 수 없습니다.");
+			return;
+		}
+		System.out.print("수정할 제목 : ");
+		String title = sc.nextLine();
+		System.out.print("수정할 내용 : ");
+		String content = sc.nextLine();
+		
+		int result = bc.updateBoard(bno, title, content, memberId);
+		
+		if (result == 1) {
+			System.out.println("게시글 수정 성공!");
+		} else {
+			System.out.println("게시글 수정 실패..");
+		}
 	}
 	
 	/** 
@@ -112,20 +174,31 @@ public class BoardView {
 	 * 사용자로 하여금 삭제할 게시글 번호를 입력받아 게시글 삭제 요청을 보내는 메소드
 	 * */
 	public void deleteBoard() {
+		System.out.println("### 게시글 삭제 ###");
+		System.out.println("게시글 삭제를 위해 게시글 번호를 입력해주세요.");
+		System.out.print("게시글 번호 : ");		
+		int bno = sc.nextInt();
+		sc.nextLine();
 		
+		Board b = bc.selectBoard(bno);
+		
+		// 해당 게시글 번호가 board 테이블에 존재하는지 확인
+		if (b == null) {
+			System.out.println("해당 게시글이 존재하지 않습니다.");
+			return;
+		}
+		// 존재한다면 memberId와 게시글의 writer가 일치한지 확인
+		if (!memberId.equals(b.getWriter())) {
+			System.out.println("다른 사용자의 게시글을 삭제할 수 없습니다.");
+			return;
+		}
+		int result = bc.deleteBoard(bno);
+		
+		if (result == 1) {
+			System.out.println("게시글 삭제 성공!");
+		} else {
+			System.out.println("게시글 삭제 실패..");
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

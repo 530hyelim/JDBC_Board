@@ -15,37 +15,49 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int login(String memberId, String MemberPwd) {
 		Connection conn = JDBCTemplate.getConnection();
-		
 		int result = dao.login(conn, memberId, MemberPwd);
-		
 		JDBCTemplate.close(conn);
-		
 		return result;
 	}
 
 	@Override
 	public int insertBoard(Board b) {
-		return 0;
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.insertBoard(conn, b, dao.getBno(conn));
+		JDBCTemplate.close(conn);
+		return result;
 	}
 
 	@Override
 	public List<Board> selectBoardList() {
-		return null;
+		Connection conn = JDBCTemplate.getConnection();
+		List<Board> result = dao.selectBoardList(conn);
+		JDBCTemplate.close(conn);
+		return result;
 	}
 
 	@Override
 	public Board selectBoard(int boardNo) {
-		return null;
+		Connection conn = JDBCTemplate.getConnection();
+		Board result = dao.selectBoard(conn, boardNo);
+		JDBCTemplate.close(conn);
+		return result;
 	}
 
 	@Override
 	public int updateBoard(int boardNo, Board b) {
-		return 0;
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.updateBoard(conn, boardNo, b);
+		JDBCTemplate.close(conn);
+		return result;
 	}
 
 	@Override
 	public int deleteBoard(int boardNo) {
-		return 0;
+		Connection conn = JDBCTemplate.getConnection();
+		int result = dao.deleteBoard(conn, boardNo);
+		JDBCTemplate.close(conn);
+		return result;
 	}
 	
 }

@@ -7,6 +7,10 @@ public class Member {
 	private String memberId;
 	private String memberPwd;
 	
+	public Member() {
+		
+	}
+	/*
 	public Member(String memberId, String memberPwd) {
 		this.memberId = memberId;
 		this.memberPwd = memberPwd;
@@ -16,7 +20,7 @@ public class Member {
 	public String toString() {
 		return "Member [memberId=" + memberId + ", memberPwd=" + memberPwd + "]";
 	}
-
+	*/
 	public String getMemberId() {
 		return memberId;
 	}
