@@ -26,9 +26,10 @@ public class BoardView {
 		System.out.print("PWD : ");		
 		String memberPwd = sc.nextLine();
 		
-		int result = bc.login(memberId, memberPwd);
+		//int result = bc.login2(memberId, memberPwd);
+		boolean result = bc.login(memberId, memberPwd);
 		
-		if (result == 1) {
+		if (result/* == 1*/) {
 			System.out.println("로그인 성공!");
 			this.memberId = memberId;
 			mainMenu();
@@ -83,7 +84,8 @@ public class BoardView {
 			return;
 		}
 		System.out.println("게시글 번호\t게시글 제목\t작성자\t작성시간");
-		System.out.println(b);
+		//System.out.println(b);
+		b.stream().forEach(System.out::println);
 	}
 	
 	/** 
@@ -95,6 +97,9 @@ public class BoardView {
 	public void selectBoard() {
 		System.out.println("### 게시글 상세 조회 ###");
 		System.out.println("서비스 이용을 위해 게시글 번호를 입력해주세요.");
+		
+		selectBoardList();
+		
 		System.out.print("게시글 번호 : ");
 		int bno = sc.nextInt();
 		sc.nextLine();
@@ -102,7 +107,7 @@ public class BoardView {
 		Board b = bc.selectBoard(bno);
 		
 		if (b == null) {
-			System.out.println("게시글 조회 실패..");
+			System.out.println("존재하지 않는 게시글입니다...");
 			return;
 		}
 		System.out.println("게시글 번호\t게시글 제목\t게시글 작성 날짜");
@@ -200,5 +205,6 @@ public class BoardView {
 			System.out.println("게시글 삭제 실패..");
 		}
 	}
-	
+	// 삭제가 된 것처럼 보이게 꾸미기 vs.
+	// 트리거를 사용하여 삭제된 내용들만 관리하는 테이블에 추가
 }

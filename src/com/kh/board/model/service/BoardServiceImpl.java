@@ -23,7 +23,14 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int insertBoard(Board b) {
 		Connection conn = JDBCTemplate.getConnection();
-		int result = dao.insertBoard(conn, b, dao.getBno(conn));
+		//int result = dao.insertBoard(conn, b, dao.getBno(conn));
+		int result = dao.insertBoard(conn, b);
+		
+		if (result == 1) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
 		JDBCTemplate.close(conn);
 		return result;
 	}
@@ -45,17 +52,33 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int updateBoard(int boardNo, Board b) {
+	public int updateBoard(/*int boardNo, */Board b) {
 		Connection conn = JDBCTemplate.getConnection();
-		int result = dao.updateBoard(conn, boardNo, b);
+		int result = dao.updateBoard(conn, /*boardNo, */b);
+		
+		if (result == 1) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
 		JDBCTemplate.close(conn);
 		return result;
 	}
+	// 실제로는 에러가 발생되는 경우에 롤백
+	// 다양한 트랜잭션 관리 기법이 있음
+	// 스프링 프레임워크같은거 사용하게 되면 전체를 try-catch로 감싸고
+	// 어노테이션으로 예외처리
 
 	@Override
 	public int deleteBoard(int boardNo) {
 		Connection conn = JDBCTemplate.getConnection();
 		int result = dao.deleteBoard(conn, boardNo);
+		
+		if (result == 1) {
+			JDBCTemplate.commit(conn);
+		} else {
+			JDBCTemplate.rollback(conn);
+		}
 		JDBCTemplate.close(conn);
 		return result;
 	}

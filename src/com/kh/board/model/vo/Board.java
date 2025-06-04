@@ -11,6 +11,8 @@ public class Board {
 	private String content;
 	private String writer;
 	private Date createDate;
+	// 필요한 데이터 컬럼만 최소한으로 기술하는 것이 정석
+	// 따라서 selectBoardList와 selectBoard용 dto를 따로 생성
 	
 	public Board() {
 		

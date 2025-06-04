@@ -13,7 +13,6 @@ import java.util.Properties;
 
 import com.kh.board.model.template.JDBCTemplate;
 import com.kh.board.model.vo.Board;
-import com.kh.board.model.vo.Member;
 
 /** 
  * Service의 요청에 맞는 sql문을 실행할 클래스.
@@ -38,20 +37,16 @@ public class BoardDao {
 		int result = 0;
 		
 		try {
-			/*
+			//stmt = conn.prepareStatement(prop.getProperty("login2"));
 			stmt = conn.prepareStatement(prop.getProperty("login"));
 			stmt.setString(1, memberId);
 			stmt.setString(2, memberPwd);
 			rset = stmt.executeQuery();
 			
-			while (rset.next()) {
-				System.out.println(rset.getString("MEMBER_NAME"));
-				result++;
+			if (rset.next()) {
+				result = rset.getInt(1);
 			}
-			*/
-			stmt = conn.prepareStatement(prop.getProperty("selectMember"));
-			rset = stmt.executeQuery();
-			
+			/*
 			while (rset.next()) {
 				Member m = new Member();
 				m.setMemberId(rset.getString("MEMBER_ID"));
@@ -60,7 +55,7 @@ public class BoardDao {
 				if (m.getMemberId().equals(memberId) && m.getMemberPwd().equals(memberPwd)) {
 					result++;
 				}
-			}
+			} */
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -70,31 +65,38 @@ public class BoardDao {
 		return result;
 	}
 
+	/*
 	public int insertBoard(Connection conn, Board b, int bno) {
-		PreparedStatement stmt = null;
+		String sql = prop.getProperty("insert2");
 		int updateCount = 0;
 		
-		try {
-			stmt = conn.prepareStatement(prop.getProperty("insert"));
+		try (PreparedStatement stmt = conn.prepareStatement(sql)){
 			stmt.setInt(1, ++bno);
 			stmt.setString(2, b.getTitle());
 			stmt.setString(3, b.getContent());
 			stmt.setString(4, b.getWriter());
 			updateCount = stmt.executeUpdate();
-			
-			if (updateCount == 1) {
-				JDBCTemplate.commit(conn);
-			} else {
-				JDBCTemplate.rollback(conn);
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			JDBCTemplate.close(stmt);
 		}
 		return updateCount;
 	}
-
+	*/
+	public int insertBoard(Connection conn, Board b) {
+		String sql = prop.getProperty("insert");
+		int updateCount = 0;
+		
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, b.getTitle());
+			stmt.setString(2, b.getContent());
+			stmt.setString(3, b.getWriter());
+			updateCount = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return updateCount;
+	}
+	/*
 	public int getBno(Connection conn) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
@@ -115,7 +117,7 @@ public class BoardDao {
 		}
 		return bno;
 	}
-
+	*/
 	public List<Board> selectBoardList(Connection conn) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
@@ -172,48 +174,30 @@ public class BoardDao {
 		return b;
 	}
 
-	public int updateBoard(Connection conn, int boardNo, Board b) {
-		PreparedStatement stmt = null;
+	public int updateBoard(Connection conn, /*int boardNo, */Board b) {
+		String sql = prop.getProperty("updateBoard");
 		int updateCount = 0;
 		
-		try {
-			stmt = conn.prepareStatement(prop.getProperty("updateBoard"));
+		try (PreparedStatement stmt = conn.prepareStatement(sql)){
 			stmt.setString(1, b.getTitle());
 			stmt.setString(2, b.getContent());
-			stmt.setInt(3, boardNo);
+			stmt.setInt(3, b.getBno());
 			updateCount = stmt.executeUpdate();
-			
-			if (updateCount == 1) {
-				JDBCTemplate.commit(conn);
-			} else {
-				JDBCTemplate.rollback(conn);
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			JDBCTemplate.close(stmt);
 		}
 		return updateCount;
 	}
 
 	public int deleteBoard(Connection conn, int boardNo) {
-		PreparedStatement stmt = null;
+		String sql = prop.getProperty("disableBoard");
 		int updateCount = 0;
 		
-		try {
-			stmt = conn.prepareStatement(prop.getProperty("disableBoard"));
+		try (PreparedStatement stmt = conn.prepareStatement(sql)){
 			stmt.setInt(1, boardNo);
 			updateCount = stmt.executeUpdate();
-			
-			if (updateCount == 1) {
-				JDBCTemplate.commit(conn);
-			} else {
-				JDBCTemplate.rollback(conn);
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			JDBCTemplate.close(stmt);
 		}
 		return updateCount;
 	}

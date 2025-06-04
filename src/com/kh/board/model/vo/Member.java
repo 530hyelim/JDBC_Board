@@ -14,7 +14,7 @@ public class Member {
 	public Member(String memberId, String memberPwd) {
 		this.memberId = memberId;
 		this.memberPwd = memberPwd;
-	}
+	} 
 	
 	@Override
 	public String toString() {

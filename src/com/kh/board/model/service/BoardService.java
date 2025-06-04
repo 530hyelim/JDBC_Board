@@ -44,7 +44,7 @@ public interface BoardService {
 	 * @param B       : 수정할 게시글 정보(게시글 제목, 내용만 수정가능)
 	 * @return 처리된 행의 갯수를 반환
 	 */
-	int updateBoard(int boardNo, Board b);
+	int updateBoard(/*int boardNo, */Board b);
 
 	/**
 	 * 게시글 삭제 메서드

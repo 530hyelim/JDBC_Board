@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="login">
+	<entry key="login2">
 	SELECT * FROM MEMBER WHERE MEMBER_ID = ? AND MEMBER_PWD = ?
-	</entry>
-	<entry key="selectMember">
-	SELECT * FROM MEMBER	
-	</entry>
-	<entry key="insert">
+	</entry> 
+	<entry key="insert2">
 	INSERT INTO BOARD VALUES(?,?,?,DEFAULT,?,DEFAULT)
 	</entry>
+	<entry key="login">
+	SELECT COUNT(*) FROM MEMBER WHERE MEMBER_ID = ? AND MEMBER_PWD = ?
+	</entry>
 	<entry key="select">
+	<!-- 꼭 필요한 데이터만 조회하는 것이 좋음! -->
 	SELECT * FROM BOARD WHERE DELETE_YN = 'N'
 	</entry>
 	<entry key="selectBoard">
 	SELECT * FROM BOARD WHERE BNO = ? AND DELETE_YN = 'N'
+	</entry>
+	<entry key="insert">
+	INSERT INTO BOARD(BNO, TITLE, CONTENT, WRITER) VALUES(SEQ_BOARD.NEXTVAL,?,?,?)
 	</entry>
 	<entry key="updateBoard">
 	UPDATE BOARD SET TITLE = ?, CONTENT = ? WHERE BNO = ? AND DELETE_YN = 'N'
